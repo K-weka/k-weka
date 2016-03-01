@@ -23,6 +23,17 @@ public class testeReflection {
         return boolMetodos;
     }
 
+    public ArrayList<Method> getMethods(Method[] metodos, Class c) {
+        ArrayList<Method> boolMetodos = new ArrayList<Method>();
+        for (Method f : metodos) {
+            if (f.getParameterCount() == 1 && f.getParameterTypes()[0] == c) {
+                boolMetodos.add(f);
+
+            }
+        }
+        return boolMetodos;
+    }
+
     public J48 resetObject(J48 j48,ArrayList<Method> metodos){
         for(Method m1: metodos){
             try {
@@ -57,7 +68,7 @@ public class testeReflection {
 
             testeReflection t = new testeReflection();
             ArrayList<Method> m = t.getBooleanMethods(J48.class.getMethods());
-
+            
 
 
 
@@ -90,11 +101,11 @@ public class testeReflection {
             resultado.put(eval.errorRate(),tempArr);
         }
 
-            for(double d : resultado.keySet()){
-                System.out.println(d+" | "+resultado.get(d));
-            }
-
-            System.out.println(allmasks);
+//            for(double d : resultado.keySet()){
+//                System.out.println(d+" | "+resultado.get(d));
+//            }
+//
+//            System.out.println(allmasks);
     }catch (Exception e) {
             e.printStackTrace();
         }
