@@ -5,9 +5,7 @@ import weka.core.converters.ConverterUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by allan on 29/02/16.
@@ -64,7 +62,7 @@ public class testeReflection {
 
 
         J48 temp;
-
+        Map<Double,ArrayList<Method>> resultado = new TreeMap<>();
         ArrayList<Method> tempArr;
         int N = m.size();
         int allmasks = (1 << N);
@@ -89,13 +87,20 @@ public class testeReflection {
             }
             temp.buildClassifier(iTreinamento);
             eval.evaluateModel(temp,iTeste);
-            System.out.println(sub + "  " + eval.errorRate());
+            resultado.put(eval.errorRate(),tempArr);
         }
+
+            for(double d : resultado.keySet()){
+                System.out.println(d+" | "+resultado.get(d));
+            }
 
             System.out.println(allmasks);
     }catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
 
     }
 }
