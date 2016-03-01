@@ -18,24 +18,28 @@ public class arvoreDecisao {
             instances = instances.resample(new Random(1));
 
 
-            Instances iTeste = instances.testCV(4, 2);
+            Instances iTeste = instances.testCV(5, 2);
             System.out.println(iTeste.numInstances() + " Cados de Teste");
 
-            Instances iTreinamento = instances.trainCV(4, 2);
+            Instances iTreinamento = instances.trainCV(5, 2);
             System.out.println(iTreinamento.numInstances() + " Casos de treinamento");
             Evaluation eval=new Evaluation(instances);
 
             J48 arvore = new J48();
             arvore.setConfidenceFactor(0.4f);
             arvore.setReducedErrorPruning(true);
+            arvore.setBinarySplits(false);
+            arvore.setCollapseTree(false);
+
+
 
             arvore.buildClassifier(iTreinamento);
 
-//            eval.evaluateModel(arvore,iTeste);
-            CustomEvaluation myEval = new CustomEvaluation(instances);
-            System.out.println(myEval.manyEvaluations(instances,arvore));
+            eval.evaluateModel(arvore,iTeste);
+//            CustomEvaluation myEval = new CustomEvaluation(instances);
+//            System.out.println(myEval.manyEvaluations(instances,arvore));
 
-            System.out.println(eval.predictions());
+
 
             System.out.println(eval.toSummaryString());
 
