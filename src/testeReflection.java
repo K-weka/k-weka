@@ -57,10 +57,10 @@ public class testeReflection {
             instances = instances.resample(new Random(1));
 
 
-            Instances iTeste = instances.testCV(5, 2);
+            Instances iTeste = instances.testCV(4, 2);
             System.out.println(iTeste.numInstances() + " Cados de Teste");
 
-            Instances iTreinamento = instances.trainCV(5, 2);
+            Instances iTreinamento = instances.trainCV(4, 2);
             System.out.println(iTreinamento.numInstances() + " Casos de treinamento");
 
             Evaluation eval = new Evaluation(instances);
@@ -68,7 +68,7 @@ public class testeReflection {
 
             testeReflection t = new testeReflection();
             ArrayList<Method> m = t.getBooleanMethods(J48.class.getMethods());
-            
+
 
 
 
@@ -101,11 +101,11 @@ public class testeReflection {
             resultado.put(eval.errorRate(),tempArr);
         }
 
-//            for(double d : resultado.keySet()){
-//                System.out.println(d+" | "+resultado.get(d));
-//            }
-//
-//            System.out.println(allmasks);
+            for(double d : resultado.keySet()){
+                System.out.println(d+" | "+resultado.get(d));
+            }
+
+            System.out.println(allmasks);
     }catch (Exception e) {
             e.printStackTrace();
         }
