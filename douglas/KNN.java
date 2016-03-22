@@ -15,9 +15,12 @@ public class KNN {
 			// usa ultimo atributo como classe
 			data.setClassIndex(data.numAttributes() - 1);
 
+			// randomiza o dataset
+			data.randomize(new java.util.Random());
+
 			// Percent split
 			double percent = 90.0;
-			
+
 			// casos de treinamento
 			int trainSize = (int) Math.round(data.numInstances() * percent
 					/ 100);
@@ -26,9 +29,9 @@ public class KNN {
 			// casos de teste
 			int testSize = data.numInstances() - trainSize;
 			Instances test = new Instances(data, trainSize, testSize);
-			
-			// k = 2
-			Classifier ibk = new IBk(2);
+
+			// k = 3
+			Classifier ibk = new IBk(3);
 			ibk.buildClassifier(train);
 
 			Evaluation e = new Evaluation(test);
@@ -39,16 +42,7 @@ public class KNN {
 			System.out.println(s);
 			s = e.toMatrixString();
 			System.out.println(s);
-			
-			// printar classificação dos casos de teste
-			// 0 = N
-			// 1 = O
-			for (int i = 90; i < 100; i++) {
-				double result = ibk.classifyInstance(data.instance(i));
-				System.out.println(" Para instancia[" + (i + 1) + "] = " + result);
-				
-			}
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
