@@ -54,7 +54,7 @@ public class testeReflection {
             Instances instances = source.getDataSet(9);
 
 
-            instances = instances.resample(new Random(1));
+//            instances = instances.resample(new Random(1));
 
 
             Instances iTeste = instances.testCV(4, 2);
@@ -63,14 +63,14 @@ public class testeReflection {
             Instances iTreinamento = instances.trainCV(4, 2);
             System.out.println(iTreinamento.numInstances() + " Casos de treinamento");
 
-            Evaluation eval = new Evaluation(instances);
+            Evaluation eval;
 
 
             testeReflection t = new testeReflection();
             ArrayList<Method> m = t.getBooleanMethods(J48.class.getMethods());
 
 
-
+            double acuracia;
 
         J48 temp;
         Map<Double,ArrayList<Method>> resultado = new TreeMap<>();
@@ -80,7 +80,11 @@ public class testeReflection {
         for (int i = 1; i < allmasks; i++) {
             temp = t.resetObject(j48, m);
             tempArr=new ArrayList<Method>();
+            temp.setConfidenceFactor(0.1f);
+//            temp.setMinNumObj(2);
+            temp.setNumFolds(2);
             String sub = "";
+            eval = new Evaluation(instances);
             for (int j = 0; j < N; j++) {
                 if ((i & (1 << j)) > 0) {
                     try {
@@ -97,8 +101,18 @@ public class testeReflection {
 
             }
             temp.buildClassifier(iTreinamento);
-            eval.evaluateModel(temp,iTeste);
-            resultado.put(eval.errorRate(),tempArr);
+//            eval.evaluateModel(temp,iTeste);
+            eval.crossValidateModel(temp,instances,10,new Random(1));
+            acuracia =(100.0f - (eval.errorRate() * 100.0f));
+//            if (acuracia>=89.0f){
+//                System.out.println(tempArr);
+//            }
+            if(resultado.containsKey(acuracia) && resultado.get(acuracia).size()>tempArr.size()){
+                resultado.replace(acuracia,tempArr);
+            }else if(!resultado.containsKey(acuracia)){
+                resultado.put(acuracia,tempArr);
+            }
+
         }
 
             for(double d : resultado.keySet()){

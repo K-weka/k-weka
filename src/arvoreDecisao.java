@@ -5,9 +5,7 @@ import weka.core.converters.ConverterUtils;
 
 import java.util.Random;
 
-/**
- * Created by allan on 26/02/16.
- */
+
 public class arvoreDecisao {
     public static void main(String[] args) {
 
@@ -15,33 +13,32 @@ public class arvoreDecisao {
             ConverterUtils.DataSource source = new ConverterUtils.DataSource("fertility_Diagnosis.arff");
             Instances instances = source.getDataSet(9);
 
-            instances = instances.resample(new Random(1));
-
-
-            Instances iTeste = instances.testCV(5, 2);
-            System.out.println(iTeste.numInstances() + " Cados de Teste");
-
-            Instances iTreinamento = instances.trainCV(5, 2);
-            System.out.println(iTreinamento.numInstances() + " Casos de treinamento");
             Evaluation eval=new Evaluation(instances);
 
             J48 arvore = new J48();
-            arvore.setConfidenceFactor(0.4f);
-            arvore.setReducedErrorPruning(true);
+            arvore.setConfidenceFactor(0.1f);
+            arvore.setReducedErrorPruning(false);
             arvore.setBinarySplits(false);
             arvore.setCollapseTree(false);
+            arvore.setUseLaplace(false);
+            arvore.setUseMDLcorrection(true);
+            arvore.setUnpruned(true);
+            arvore.setCollapseTree(false);
+            arvore.setReducedErrorPruning(false);
+            arvore.setSubtreeRaising(false);
+            arvore.setNumFolds(30);
 
 
 
-            arvore.buildClassifier(iTreinamento);
 
-            eval.evaluateModel(arvore,iTeste);
-//            CustomEvaluation myEval = new CustomEvaluation(instances);
-//            System.out.println(myEval.manyEvaluations(instances,arvore));
+            arvore.buildClassifier(instances);
+            eval.crossValidateModel(arvore,instances,10,new Random(1));
+
 
 
 
             System.out.println(eval.toSummaryString());
+            System.out.println(eval.toMatrixString());
 
         }catch (Exception ignored){
             ignored.printStackTrace();
