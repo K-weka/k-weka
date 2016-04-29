@@ -1,9 +1,13 @@
 import weka.clusterers.ClusterEvaluation;
 
+
 import weka.clusterers.SelfOrganizingMap;
 import weka.core.Instances;
+import weka.core.Utils;
 import weka.core.converters.ConverterUtils;
+import weka.knowledgeflow.steps.ClustererPerformanceEvaluator;
 
+import javax.rmi.CORBA.Util;
 import java.util.Random;
 
 /**
@@ -27,25 +31,36 @@ public class Som {
         som.setOrderingEpochs(50);
 
 
-        som.setWidth(2);
+        som.setWidth(3);
         som.setCalcStats(true);
+
         som.buildClusterer(instances);
-//        System.out.println(som.getClusters());
 
 
-//        ClusterEvaluation eval = new ClusterEvaluation();
+
+
+
+
+        ClusterEvaluation eval = new ClusterEvaluation();
+
+
 //
-//        eval.setClusterer(som);
 //
-//        eval.evaluateClusterer(instances);
-//
+        eval.setClusterer(som);
+        eval.evaluateClusterer(instances);
+        System.out.println(eval.clusterResultsToString());
+
+        for (int i=0;i<instances.size();i++){
+            double[] dist=som.distributionForInstance(instances.get(i));
+//            System.out.println(Utils.arrayToString(dist));
+        }
+
+        //
 //        System.out.println(eval.clusterResultsToString());
-        System.out.println(som.toString());
-
-
 //        System.out.println(som.toString());
 
 
+//        System.out.println(som.toString());
 
 
 
